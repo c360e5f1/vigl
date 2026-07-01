@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="64" fill="#0a0a0a"/>
+  <!-- Subtle border -->
+  <rect x="8" y="8" width="496" height="496" rx="56" fill="none" stroke="#1a9940" stroke-width="2" opacity="0.5"/>
+  <!-- Inner glow -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#33ff66" stroke-width="1" opacity="0.1"/>
+  <!-- Eye shape - vigilance symbol -->
+  <ellipse cx="256" cy="256" rx="140" ry="80" fill="none" stroke="#33ff66" stroke-width="8" opacity="0.9"/>
+  <!-- Pupil -->
+  <circle cx="256" cy="256" r="40" fill="#33ff66" opacity="0.9"/>
+  <!-- Center dot -->
+  <circle cx="256" cy="256" r="12" fill="#0a0a0a"/>
+  <!-- Scan lines across the icon -->
+  <g opacity="0.08">
+    <line x1="40" y1="100" x2="472" y2="100" stroke="#33ff66" stroke-width="1"/>
+    <line x1="40" y1="150" x2="472" y2="150" stroke="#33ff66" stroke-width="1"/>
+    <line x1="40" y1="200" x2="472" y2="200" stroke="#33ff66" stroke-width="1"/>
+    <line x1="40" y1="250" x2="472" y2="250" stroke="#33ff66" stroke-width="1"/>
+    <line x1="40" y1="300" x2="472" y2="300" stroke="#33ff66" stroke-width="1"/>
+    <line x1="40" y1="350" x2="472" y2="350" stroke="#33ff66" stroke-width="1"/>
+    <line x1="40" y1="400" x2="472" y2="400" stroke="#33ff66" stroke-width="1"/>
+  </g>
+  <!-- VIGL text -->
+  <text x="256" y="440" font-size="56" font-family="monospace" text-anchor="middle" fill="#33ff66" letter-spacing="8" opacity="0.8">VIGL</text>
+</svg>

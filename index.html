@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0a0a">
+  <title>VIGL</title>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green: #33ff66;
+      --green-dim: #1a9940;
+      --green-glow: rgba(51, 255, 102, 0.15);
+      --orange: #ff8800;
+      --orange-dim: #995200;
+      --orange-glow: rgba(255, 136, 0, 0.15);
+      --red: #ff3333;
+      --bg: #0a0a0a;
+      --bg-panel: rgba(51, 255, 102, 0.03);
+      --border: rgba(51, 255, 102, 0.2);
+      /* Active theme colors (default: standby/orange) */
+      --theme: var(--orange);
+      --theme-dim: var(--orange-dim);
+      --theme-glow: var(--orange-glow);
+    }
+
+    body.active {
+      --theme: var(--green);
+      --theme-dim: var(--green-dim);
+      --theme-glow: var(--green-glow);
+    }
+
+    body {
+      font-family: 'Share Tech Mono', 'Courier New', monospace;
+      background: var(--bg);
+      color: var(--theme);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    /* Subtle scan line overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.08) 2px,
+        rgba(0, 0, 0, 0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    /* Subtle vignette */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%);
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    #app {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .header {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--theme-dim);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 0.5rem;
+      width: 100%;
+      text-align: center;
+      transition: color 0.3s;
+    }
+
+    .title {
+      font-size: 2.2rem;
+      letter-spacing: 0.25em;
+      text-shadow: 0 0 10px var(--theme-glow), 0 0 20px var(--theme-glow);
+      margin: 0.25rem 0;
+      transition: text-shadow 0.3s;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      color: var(--theme-dim);
+      transition: color 0.3s;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--theme-dim);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .status-dot.active {
+      background: var(--theme);
+      box-shadow: 0 0 6px var(--theme), 0 0 12px var(--theme-glow);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .timer {
+      font-size: 1.8rem;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 8px var(--theme-glow);
+      padding: 0.5rem 0;
+      transition: text-shadow 0.3s;
+    }
+
+    .last-duration {
+      font-size: 0.65rem;
+      color: var(--theme-dim);
+      letter-spacing: 0.1em;
+      min-height: 1em;
+      transition: color 0.3s;
+    }
+
+    button {
+      font-family: 'Share Tech Mono', 'Courier New', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.6em 2em;
+      background: transparent;
+      color: var(--theme);
+      border: 1px solid var(--theme-dim);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    button:hover {
+      background: var(--theme-glow);
+      border-color: var(--theme);
+      box-shadow: 0 0 10px var(--theme-glow), inset 0 0 10px var(--theme-glow);
+    }
+
+    button:active {
+      background: var(--theme-glow);
+    }
+
+    .footer {
+      font-size: 0.55rem;
+      color: var(--theme-dim);
+      letter-spacing: 0.15em;
+      opacity: 0.5;
+      margin-top: 0.5rem;
+      transition: color 0.3s;
+    }
+
+    .unsupported {
+      color: var(--red);
+      font-size: 0.8rem;
+      text-align: center;
+      padding: 2rem;
+      letter-spacing: 0.1em;
+      border: 1px solid var(--red);
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="header">weyland-yutani corp</div>
+    <div class="title">VIGL</div>
+    <div class="status-indicator">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="status">standby</span>
+    </div>
+    <div class="timer" id="timer">00:00:00</div>
+    <div class="last-duration" id="lastDuration"></div>
+    <button id="toggleBtn" aria-label="Toggle wake lock">ENGAGE</button>
+    <div class="footer">screen lock override v2.1</div>
+  </div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const timerEl = document.getElementById('timer');
+      const lastDurationEl = document.getElementById('lastDuration');
+      const toggleBtn = document.getElementById('toggleBtn');
+      const statusEl = document.getElementById('status');
+      const statusDot = document.getElementById('statusDot');
+
+      let wakeLock = null;
+      let timerInterval = null;
+      let startTime = null;
+      let lastDuration = null;
+      let userDisabled = false;
+
+      if (!('wakeLock' in navigator)) {
+        document.getElementById('app').innerHTML =
+          '<div class="unsupported">// ERROR: WAKE LOCK API UNAVAILABLE //</div>';
+        return;
+      }
+
+      function formatTime(ms) {
+        const totalSeconds = Math.floor(ms / 1000);
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+      }
+
+      function updateUI(active) {
+        toggleBtn.textContent = active ? 'DISENGAGE' : 'ENGAGE';
+        document.body.classList.toggle('active', active);
+        toggleBtn.setAttribute('aria-label', active ? 'Disable wake lock' : 'Enable wake lock');
+        statusEl.textContent = active ? 'active' : 'standby';
+        statusDot.classList.toggle('active', active);
+      }
+
+      function startTimer() {
+        startTime = Date.now();
+        timerEl.textContent = '00:00:00';
+        timerInterval = setInterval(() => {
+          timerEl.textContent = formatTime(Date.now() - startTime);
+        }, 1000);
+      }
+
+      function stopTimer() {
+        if (timerInterval) {
+          clearInterval(timerInterval);
+          timerInterval = null;
+        }
+        if (startTime) {
+          lastDuration = Date.now() - startTime;
+          lastDurationEl.textContent = `prev: ${formatTime(lastDuration)}`;
+        }
+        timerEl.textContent = '00:00:00';
+        startTime = null;
+      }
+
+      async function requestWakeLock() {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+          wakeLock.addEventListener('release', () => {
+            wakeLock = null;
+            updateUI(false);
+            stopTimer();
+          });
+          updateUI(true);
+          startTimer();
+        } catch (err) {
+          statusEl.textContent = `err: ${err.message}`;
+          updateUI(false);
+        }
+      }
+
+      async function releaseWakeLock() {
+        if (wakeLock) {
+          await wakeLock.release();
+          wakeLock = null;
+        }
+        updateUI(false);
+        stopTimer();
+      }
+
+      toggleBtn.addEventListener('click', async () => {
+        if (wakeLock) {
+          userDisabled = true;
+          await releaseWakeLock();
+        } else {
+          userDisabled = false;
+          await requestWakeLock();
+        }
+      });
+
+      document.addEventListener('visibilitychange', async () => {
+        if (document.visibilityState === 'visible' && !userDisabled) {
+          await requestWakeLock();
+        }
+      });
+
+      requestWakeLock();
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js');
+      }
+    })();
+  </script>
+</body>
+</html>
