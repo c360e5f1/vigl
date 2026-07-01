@@ -1,4 +1,7 @@
 # VIGL
+
+<img width="388" height="376" alt="image" src="https://github.com/user-attachments/assets/e2a05a85-533a-4ab7-8b31-1d00c6810b97" />
+
 VIGL is a small progressive web application (PWA) that starts a wake lock to prevent the device from going to sleep or shutting off the display. This is intended to be run in a Docker container behind a TLS reverse proxy such as Traefik.
 
 ***
