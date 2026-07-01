@@ -1,0 +1,6 @@
+services:
+    vigl:
+      image: ghcr.io/c360e5f1/vigl:latest
+      ports:
+        - "8080:8080"
+      restart: unless-stopped
