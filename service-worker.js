@@ -1,4 +1,4 @@
-const CACHE_NAME = 'staylitty-v1';
+const CACHE_NAME = 'vigl-20260702-01';
 const ASSETS = [
   '/',
   '/index.html',
