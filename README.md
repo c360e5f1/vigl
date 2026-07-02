@@ -1,6 +1,6 @@
 # VIGL
 
-<img width="388" height="376" alt="image" src="https://github.com/user-attachments/assets/e2a05a85-533a-4ab7-8b31-1d00c6810b97" />
+<img width="401" height="351" alt="image" src="https://github.com/user-attachments/assets/bf8609f2-eb7b-490c-be3e-ed4a4afe33bd" />
 
 
 
